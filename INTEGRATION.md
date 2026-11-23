@@ -172,3 +172,17 @@ node deploy/cohesivity.mjs --no-deploy   # build and bundle only, to .deploy/wor
 - Server keys are embedded only when named: `COH_SECRETS=ANTHROPIC_API_KEY,DESK_REDIS_URL node deploy/cohesivity.mjs`. They go into the worker, never into the browser bundle or the repository.
 - Cohesivity workers run with an old Cloudflare compatibility date and without `nodejs_compat`. `deploy/shims/` supplies the four Node modules the build imports and a web streams fallback for React's streaming render. If a new dependency imports another `node:` module, add a shim there.
 - Static files are embedded in the worker (about 1.3 MB in total today).
+
+## 13. Team 5 (P05) in the common repository
+
+Added by Team 5 on 23 Nov 2026.
+
+| Step | What | When |
+| --- | --- | --- |
+| Now | Nav entry "P05 Matching" under **Team modules (external)** opens Team 5's prototype, https://thecyper.github.io/bus2010-p05-opportunity-matcher/, which already reads the shared database live (391 students, 209 published listings) | Sprint 3 |
+| Next | `src/lib/p05/`: the P05 matching engine ported to TypeScript with its tests (rules baseline `rules-1.0.0` and the AI method `ai-embed-1.0.0`, gte-small sentence embeddings); Student → Recommended uses it instead of the stand-in in `src/lib/ai/matching.ts` | Phase 2 |
+| Next | `src/lib/db/`: read-only client for the shared Supabase views (`current_profiles`, `open_listings`, `opportunity_feed`, `latest_recommendations`) that every team can import | Phase 2 |
+| Later | P05 writes (recommendations, skill-gap events) through a server route with `P05_TEAM_KEY` from the host environment | Phase 3 |
+
+Source for the external module: https://github.com/TheCYPER/bus2010-p05-opportunity-matcher (guide for teams: `docs/SUPABASE_GUIDE.md`).
+

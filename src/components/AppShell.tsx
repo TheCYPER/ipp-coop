@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Briefcase, Building2, GraduationCap, ClipboardCheck, HelpCircle, Menu, MessagesSquare } from "lucide-react";
+import { Briefcase, Building2, GraduationCap, ClipboardCheck, ExternalLink, HelpCircle, Menu, MessagesSquare, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { resetDemo } from "@/lib/ipp-store";
 import { ChatWidget } from "@/components/ChatWidget";
@@ -10,6 +10,16 @@ const NAV = [
   { to: "/admin", label: "University Administrator", icon: Building2 },
   { to: "/faculty", label: "Faculty Reviewer", icon: ClipboardCheck },
   { to: "/desk", label: "Internship Desk", icon: MessagesSquare },
+] as const;
+
+// Team modules not yet ported into this app (docs/ARCHITECTURE.md, "escape hatch"): open in a new tab.
+const EXTERNAL = [
+  {
+    href: "https://thecyper.github.io/bus2010-p05-opportunity-matcher/",
+    label: "P05 Matching",
+    note: "Opportunity Matcher, Team 5",
+    icon: Sparkles,
+  },
 ] as const;
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -83,6 +93,28 @@ export function AppShell({ children }: { children: ReactNode }) {
                 </Link>
               );
             })}
+          </nav>
+          <p className="mb-2 mt-6 px-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            Team modules (external)
+          </p>
+          <nav aria-label="Team modules" className="flex flex-col gap-1">
+            {EXTERNAL.map((x) => (
+              <a
+                key={x.href}
+                href={x.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+              >
+                <x.icon className="h-4 w-4" aria-hidden="true" />
+                <span className="flex min-w-0 flex-col">
+                  <span>{x.label}</span>
+                  <span className="text-xs font-normal text-muted-foreground">{x.note}</span>
+                </span>
+                <ExternalLink className="ml-auto h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
+                <span className="sr-only">(opens in a new tab)</span>
+              </a>
+            ))}
           </nav>
           <p className="mb-2 mt-6 px-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Help</p>
           <Link
