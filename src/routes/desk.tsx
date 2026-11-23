@@ -31,9 +31,9 @@ const EXAMPLES: Record<DeskRole, string[]> = {
 
 // One look per outcome: the coloured rule, the label and the icon tell the asker where the message went.
 const OUTCOME = {
-  answered: { label: 'Answered from the guide', rule: 'border-l-[oklch(55%_.12_155)]', chip: 'bg-status text-status-foreground', Icon: BookOpenCheck },
-  escalate: { label: 'Sent to Career Services', rule: 'border-l-[oklch(62%_.15_55)]', chip: 'bg-sent text-sent-foreground', Icon: ShieldAlert },
-  unknown: { label: 'Not in the guide yet', rule: 'border-l-[oklch(70%_.01_150)]', chip: 'bg-muted text-muted-foreground', Icon: CircleHelp },
+  answered: { label: 'Answered from the guide', rule: 'border-l-status-foreground', chip: 'bg-status text-status-foreground', Icon: BookOpenCheck },
+  escalate: { label: 'Sent to Career Services', rule: 'border-l-sent-foreground', chip: 'bg-sent text-sent-foreground', Icon: ShieldAlert },
+  unknown: { label: 'Not in the guide yet', rule: 'border-l-muted-foreground', chip: 'bg-muted text-muted-foreground', Icon: CircleHelp },
 } as const;
 
 function Reply({ r }: { r: AskReply }) {
@@ -125,10 +125,10 @@ function DeskPage() {
   return (
     <div className="grid overflow-hidden rounded-3xl border border-border bg-card shadow-sm lg:grid-cols-[19rem_1fr]">
       {/* The desk: who is asking, what happens to a message, quick questions */}
-      <aside className="bg-[oklch(24%_.035_160)] p-6 text-[oklch(94%_.015_120)]">
-        <p className="text-sm text-[oklch(78%_.06_150)]">Career Services</p>
-        <h1 className="mt-1 font-serif text-3xl leading-tight">Internship Desk</h1>
-        <p className="mt-3 text-sm leading-relaxed text-[oklch(85%_.02_130)]">
+      <aside className="bg-panel p-6 text-panel-foreground">
+        <p className="text-sm text-panel-muted">Career Services</p>
+        <h1 className="mt-1 font-display text-3xl font-bold leading-tight tracking-tight">Internship Desk</h1>
+        <p className="mt-3 text-sm leading-relaxed text-panel-muted">
           Ask the university during your internship. Answers come only from the MBZUAI 2025-2026 Industry Internship Guide.
         </p>
 
@@ -139,8 +139,8 @@ function DeskPage() {
               type="button"
               aria-pressed={role === r}
               onClick={() => setRole(r)}
-              className={`inline-flex items-center justify-center gap-1.5 rounded-lg px-2 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[oklch(80%_.12_80)] ${
-                role === r ? 'bg-[oklch(94%_.015_120)] text-[oklch(24%_.035_160)]' : 'text-[oklch(85%_.02_130)] hover:bg-white/10'
+              className={`inline-flex items-center justify-center gap-1.5 rounded-lg px-2 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime ${
+                role === r ? 'bg-lime text-lime-foreground' : 'text-panel-muted hover:bg-white/10'
               }`}
             >
               <Icon aria-hidden="true" className="h-4 w-4" />
@@ -151,9 +151,9 @@ function DeskPage() {
 
         <h2 className="mt-7 text-sm font-semibold">Where your message goes</h2>
         <ol className="mt-3 space-y-3 text-sm">
-          <li className="flex gap-3"><BookOpenCheck aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-[oklch(78%_.12_155)]" /><span><strong className="font-semibold">Answered</strong> when the guide covers it.</span></li>
-          <li className="flex gap-3"><ShieldAlert aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-[oklch(80%_.13_70)]" /><span><strong className="font-semibold">Sent to Career Services</strong> when the guide says the university must be told.</span></li>
-          <li className="flex gap-3"><CircleHelp aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-[oklch(80%_.01_150)]" /><span><strong className="font-semibold">I do not know</strong> when it is not in the guide. The coordinator adds an answer.</span></li>
+          <li className="flex gap-3"><BookOpenCheck aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-lime" /><span><strong className="font-semibold">Answered</strong> when the guide covers it.</span></li>
+          <li className="flex gap-3"><ShieldAlert aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-sent" /><span><strong className="font-semibold">Sent to Career Services</strong> when the guide says the university must be told.</span></li>
+          <li className="flex gap-3"><CircleHelp aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-panel-muted" /><span><strong className="font-semibold">I do not know</strong> when it is not in the guide. The coordinator adds an answer.</span></li>
         </ol>
 
         <h2 className="mt-7 text-sm font-semibold">Try asking</h2>
@@ -164,13 +164,13 @@ function DeskPage() {
               type="button"
               disabled={busy || out}
               onClick={() => void send(q)}
-              className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-left text-sm hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[oklch(80%_.12_80)] disabled:opacity-50"
+              className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-left text-sm hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime disabled:opacity-50"
             >
               {q}
             </button>
           ))}
         </div>
-        <p className="mt-7 text-xs text-[oklch(75%_.02_130)]">Do not type personal information. Demo: all records are synthetic.</p>
+        <p className="mt-7 text-xs text-panel-muted">Do not type personal information. Demo: all records are synthetic.</p>
       </aside>
 
       {/* The conversation */}
@@ -187,7 +187,7 @@ function DeskPage() {
         <div className="flex-1 space-y-5 overflow-y-auto bg-background/60 px-5 py-6" aria-live="polite">
           {turns.length === 0 && (
             <div className="mx-auto mt-10 max-w-sm text-center">
-              <p className="font-serif text-2xl text-primary">What do you need help with?</p>
+              <p className="font-display text-2xl font-bold text-foreground">What do you need help with?</p>
               <p className="mt-2 text-sm text-muted-foreground">Sick days, weekly hours, the evaluation form, a problem at work. Ask in your own words, or pick a question on the left.</p>
             </div>
           )}

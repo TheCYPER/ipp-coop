@@ -59,9 +59,17 @@ export function AppShell({ children }: { children: ReactNode }) {
           {...(open ? { role: "dialog", "aria-modal": true } : {})}
           className={`${open ? "block" : "hidden"} fixed inset-y-0 left-0 z-20 w-64 border-r border-border bg-card p-4 md:static md:block`}
         >
-          <div className="mb-6 px-2">
-            <div className="text-lg font-bold text-primary">IPP</div>
-            <div className="text-sm text-muted-foreground">Internship Practicum</div>
+          <div className="mb-7 flex items-center gap-3 px-2">
+            <span
+              aria-hidden="true"
+              className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-lime font-display text-sm font-bold text-lime-foreground"
+            >
+              IPP
+            </span>
+            <div>
+              <div className="font-display text-lg font-bold leading-tight text-foreground">Internship Practicum</div>
+              <div className="text-xs text-muted-foreground">BUS 2010 co-op platform</div>
+            </div>
           </div>
           <p className="mb-2 px-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             Role (simulated)
@@ -74,8 +82,8 @@ export function AppShell({ children }: { children: ReactNode }) {
                   key={n.to}
                   to={n.to}
                   onClick={() => setOpen(false)}
-                  className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                    active ? "bg-accent text-accent-foreground" : "text-foreground hover:bg-muted"
+                  className={`flex items-center gap-3 rounded-full px-3.5 py-2 text-sm font-medium transition-colors ${
+                    active ? "bg-lime font-semibold text-lime-foreground" : "text-foreground hover:bg-muted"
                   }`}
                 >
                   <n.icon className="h-4 w-4" />
@@ -88,8 +96,8 @@ export function AppShell({ children }: { children: ReactNode }) {
           <Link
             to="/faq"
             onClick={() => setOpen(false)}
-            className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-              path === "/faq" ? "bg-accent text-accent-foreground" : "text-foreground hover:bg-muted"
+            className={`flex items-center gap-3 rounded-full px-3.5 py-2 text-sm font-medium transition-colors ${
+              path === "/faq" ? "bg-lime font-semibold text-lime-foreground" : "text-foreground hover:bg-muted"
             }`}
           >
             <HelpCircle className="h-4 w-4" />
@@ -121,16 +129,16 @@ export function AppShell({ children }: { children: ReactNode }) {
 export function PageHeader({ title, subtitle }: { title: string; subtitle: string }) {
   return (
     <div className="mb-6">
-      <h1 className="text-2xl font-bold text-primary md:text-3xl">{title}</h1>
-      <p className="mt-1 text-muted-foreground">{subtitle}</p>
+      <h1 className="font-display text-3xl font-bold tracking-tight text-foreground md:text-4xl">{title}</h1>
+      <p className="mt-2 max-w-3xl text-base text-muted-foreground">{subtitle}</p>
     </div>
   );
 }
 
 export function Card({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className="rounded-2xl border border-border bg-card p-5 shadow-sm">
-      <h2 className="mb-3 text-lg font-semibold text-primary">{title}</h2>
+    <section className="rounded-3xl border border-border bg-card p-6">
+      <h2 className="mb-3 font-display text-lg font-bold text-foreground">{title}</h2>
       <div className="text-sm text-card-foreground">{children}</div>
     </section>
   );
