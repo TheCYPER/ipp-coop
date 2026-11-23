@@ -2,8 +2,8 @@
  * Typed reads of the shared database's views. Every team can import these from "@/lib/db"
  * instead of writing its own fetch code and field mapping.
  */
-import { callFunction, eq, rpc, selectAll, type DbOptions } from "./client";
-import type { AiSignals, EvidenceRow, OpportunityRow, ProfileRow, RecommendationRow, SkillRow, SkillSuggestion } from "./types";
+import { callFunction, eq, inList, rpc, selectAll, type DbOptions } from "./client";
+import type { AiSignals, ChallengeRow, EvidenceRow, GapEventRow, OpportunityRow, ProfileRow, RecommendationRow, SkillRow, SkillSuggestion } from "./types";
 
 /** The shared skill vocabulary (44 terms). */
 export function getSkills(opts?: DbOptions): Promise<SkillRow[]> {
@@ -50,6 +50,36 @@ export function getLatestRecommendations(studentId: string, opts?: DbOptions): P
     student_id: eq(studentId),
     order: "rank",
   }, opts);
+}
+
+/** Every stored P05 result for one student (all profile versions and methods), newest first. */
+export function getRecommendationHistory(studentId: string, opts?: DbOptions): Promise<RecommendationRow[]> {
+  return selectAll<RecommendationRow>("recommendations", {
+    select: "recommendation_id,student_id,profile_version,opportunity_id,opportunity_version,method_id,status,status_reason,rank,pref_points,computed_at",
+    student_id: eq(studentId),
+    order: "computed_at.desc,rank",
+  }, opts);
+}
+
+/** Stored P05 results by ID (for example the ones students asked about). */
+export function getRecommendationsByIds(ids: string[], opts?: DbOptions): Promise<RecommendationRow[]> {
+  if (!ids.length) return Promise.resolve([]);
+  return selectAll<RecommendationRow>("recommendations", {
+    select: "recommendation_id,student_id,profile_version,opportunity_id,opportunity_version,method_id,status,status_reason,rank,pref_points,computed_at",
+    recommendation_id: inList(ids.slice(0, 200)),
+  }, opts);
+}
+
+/** P05 → P06 skill-gap hand-offs, optionally for one student, newest first. */
+export function getGapEvents(studentId?: string, opts?: DbOptions): Promise<GapEventRow[]> {
+  const query: Record<string, string> = { select: "*", order: "created_at.desc" };
+  if (studentId) query["student_id"] = eq(studentId);
+  return selectAll<GapEventRow>("skill_gap_events", query, opts);
+}
+
+/** Students' questions about P05 results, open ones first. */
+export function getChallenges(opts?: DbOptions): Promise<ChallengeRow[]> {
+  return selectAll<ChallengeRow>("recommendation_challenges", { select: "*", order: "status.asc,created_at.desc" }, opts);
 }
 
 /** P05 AI signals for a goal text and free-text phrases that already have stored embeddings. */

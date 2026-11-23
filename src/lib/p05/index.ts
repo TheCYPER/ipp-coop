@@ -26,6 +26,8 @@ export {
   textKey,
 } from "./engine";
 export { aiSourceText, fmtDate, requirementText, rowLine, skillName, verdict, whyLines, type Tone } from "./explain";
+export { compareMethods, fieldsUsed, historyFor, phraseSuggestions, staleness, suggestionNote, type FieldUsed, type MethodComparison, type MethodRow, type PhraseSuggestion, type Staleness } from "./coordinator";
+export { DRAFTS_KEY, findDraft, parseDrafts, removeDraft, REPLY_MAX, replyKey, suggestionKey, upsertDraft, type Draft, type ReplyDraft, type SuggestionDraft } from "./drafts";
 export { DEMO_DATA } from "./fixtures";
 export { loadMatchData, mapEvidence, mapListings, mapProfiles, mapVocabulary, withAiSignals, type LiveSource } from "./source";
 export type * from "./types";

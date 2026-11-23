@@ -113,3 +113,29 @@ export interface SkillSuggestion {
   similarity: number;
   suggested: boolean;
 }
+
+/** P05 → P06 hand-off: a skill a student sent to skills training. */
+export interface GapEventRow {
+  gap_id: string;
+  recommendation_id: string;
+  student_id: string;
+  skill_id: string;
+  opportunity_id: string;
+  requirement: "mandatory" | "desirable";
+  status: "sent" | "acknowledged" | "resolved";
+  created_at: string;
+  updated_at: string;
+}
+
+/** A student's question about one P05 result, answered by the coordinator. */
+export interface ChallengeRow {
+  challenge_id: string;
+  recommendation_id: string;
+  raised_by: string;
+  question: string;
+  status: "open" | "reviewed";
+  resolution: string | null;
+  resolved_by: string | null;
+  resolved_at: string | null;
+  created_at: string;
+}

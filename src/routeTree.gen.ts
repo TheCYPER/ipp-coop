@@ -18,6 +18,7 @@ import { Route as FaqRouteImport } from './routes/faq'
 import { Route as StudentRouteImport } from './routes/student'
 import { Route as ApiAiReviewRouteImport } from './routes/api/ai-review'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as P05CoordinatorRouteImport } from './routes/p05.coordinator'
 import { Route as ApiDeskActionRouteImport } from './routes/api/desk.$action'
 
 const IndexRoute = IndexRouteImport.update({
@@ -65,6 +66,11 @@ const ApiChatRoute = ApiChatRouteImport.update({
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const P05CoordinatorRoute = P05CoordinatorRouteImport.update({
+  id: '/p05/coordinator',
+  path: '/p05/coordinator',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiDeskActionRoute = ApiDeskActionRouteImport.update({
   id: '/api/desk/$action',
   path: '/api/desk/$action',
@@ -81,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/student': typeof StudentRoute
   '/api/ai-review': typeof ApiAiReviewRoute
   '/api/chat': typeof ApiChatRoute
+  '/p05/coordinator': typeof P05CoordinatorRoute
   '/api/desk/$action': typeof ApiDeskActionRoute
 }
 export interface FileRoutesByTo {
@@ -93,6 +100,7 @@ export interface FileRoutesByTo {
   '/student': typeof StudentRoute
   '/api/ai-review': typeof ApiAiReviewRoute
   '/api/chat': typeof ApiChatRoute
+  '/p05/coordinator': typeof P05CoordinatorRoute
   '/api/desk/$action': typeof ApiDeskActionRoute
 }
 export interface FileRoutesById {
@@ -106,6 +114,7 @@ export interface FileRoutesById {
   '/student': typeof StudentRoute
   '/api/ai-review': typeof ApiAiReviewRoute
   '/api/chat': typeof ApiChatRoute
+  '/p05/coordinator': typeof P05CoordinatorRoute
   '/api/desk/$action': typeof ApiDeskActionRoute
 }
 export interface FileRouteTypes {
@@ -120,6 +129,7 @@ export interface FileRouteTypes {
     | '/student'
     | '/api/ai-review'
     | '/api/chat'
+    | '/p05/coordinator'
     | '/api/desk/$action'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -132,6 +142,7 @@ export interface FileRouteTypes {
     | '/student'
     | '/api/ai-review'
     | '/api/chat'
+    | '/p05/coordinator'
     | '/api/desk/$action'
   id:
     | '__root__'
@@ -144,6 +155,7 @@ export interface FileRouteTypes {
     | '/student'
     | '/api/ai-review'
     | '/api/chat'
+    | '/p05/coordinator'
     | '/api/desk/$action'
   fileRoutesById: FileRoutesById
 }
@@ -157,6 +169,7 @@ export interface RootRouteChildren {
   StudentRoute: typeof StudentRoute
   ApiAiReviewRoute: typeof ApiAiReviewRoute
   ApiChatRoute: typeof ApiChatRoute
+  P05CoordinatorRoute: typeof P05CoordinatorRoute
   ApiDeskActionRoute: typeof ApiDeskActionRoute
 }
 
@@ -225,6 +238,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/p05/coordinator': {
+      id: '/p05/coordinator'
+      path: '/p05/coordinator'
+      fullPath: '/p05/coordinator'
+      preLoaderRoute: typeof P05CoordinatorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/desk/$action': {
       id: '/api/desk/$action'
       path: '/api/desk/$action'
@@ -245,6 +265,7 @@ const rootRouteChildren: RootRouteChildren = {
   StudentRoute: StudentRoute,
   ApiAiReviewRoute: ApiAiReviewRoute,
   ApiChatRoute: ApiChatRoute,
+  P05CoordinatorRoute: P05CoordinatorRoute,
   ApiDeskActionRoute: ApiDeskActionRoute,
 }
 export const routeTree = rootRouteImport

@@ -1,27 +1,14 @@
 import { useMemo, useState } from "react";
 import { latestProfile, matchStudent, rowLine, students as listStudents, whyLines, type MethodFamily, type Recommendation } from "@/lib/p05";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { JobDetails } from "./JobDetails";
-import { useAiSignals, useMatchData, type SourceState } from "./useMatchData";
+import { SourceLine } from "./SourceLine";
+import { StudentPicker } from "./StudentPicker";
+import { useAiSignals, useMatchData } from "./useMatchData";
 import { TONE, ToneIcon, VerdictChip } from "./Verdict";
 
-const DEMO_PICKS = ["COOP-B001", "COOP-B004", "COOP-B005", "COOP-B006", "COOP-P001"];
 const LIST_LIMIT = 12;
-
-function SourceLine({ source }: { source: SourceState }) {
-  const text = source.mode === "loading" ? "Loading the shared database…"
-    : source.mode === "live" ? `Live from the shared BUS2010 database: ${source.counts.students} students, ${source.counts.listings} published jobs.`
-    : "Demo data — couldn’t reach the shared database.";
-  return (
-    <p role="status" className="flex items-center gap-2 text-xs text-muted-foreground">
-      {source.mode === "live" && <span aria-hidden="true" className="h-2 w-2 rounded-full bg-primary" />}
-      {text}
-    </p>
-  );
-}
 
 /**
  * P05 AI-assisted matching on Student → Recommended (Team 5). Ranks open jobs for a student, explains each one in
@@ -31,7 +18,6 @@ function SourceLine({ source }: { source: SourceState }) {
 export function P05Matches({ studentId }: { studentId: string }) {
   const { data, source } = useMatchData();
   const [student, setStudent] = useState(studentId);
-  const [search, setSearch] = useState("");
   const [family, setFamily] = useState<MethodFamily>("rules");
   const [showAll, setShowAll] = useState(false);
   const [openId, setOpenId] = useState<string | null>(null);
@@ -65,13 +51,6 @@ export function P05Matches({ studentId }: { studentId: string }) {
   const first = profile.name.split(" ")[0] ?? profile.name;
   const open: Recommendation | null = records.find((r) => r.opportunity_id === openId) ?? null;
 
-  const pick = (value: string) => {
-    setSearch(value);
-    const id = /COOP-[A-Z]\d{3}/i.exec(value)?.[0]?.toUpperCase();
-    const hit = id ? people.find((p) => p.student_id === id) : people.find((p) => p.name.toLowerCase() === value.trim().toLowerCase());
-    if (hit) { setStudent(hit.student_id); setShowAll(false); setSearch(""); }
-  };
-
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-5 rounded-3xl bg-panel p-6 text-panel-foreground lg:flex-row lg:items-start lg:justify-between">
@@ -80,19 +59,7 @@ export function P05Matches({ studentId }: { studentId: string }) {
           <h2 className="font-display text-2xl font-bold">{profile.name} <span className="font-mono text-sm font-normal text-panel-muted">{profile.student_id} · profile v{profile.profile_version}</span></h2>
           {profile.goals && <p className="text-panel-muted">“{profile.goals}”</p>}
         </div>
-        <div className="w-full max-w-sm space-y-2">
-          <Label htmlFor="p05-student" className="text-panel-muted">Try another student ({people.length})</Label>
-          <Input id="p05-student" list="p05-students" value={search} onChange={(e) => pick(e.target.value)} placeholder="Type a name or COOP-B…" className="border-panel-muted/40 bg-panel text-panel-foreground placeholder:text-panel-muted" />
-          <datalist id="p05-students">{people.map((p) => <option key={p.student_id} value={`${p.name} (${p.student_id})`} />)}</datalist>
-          <div className="flex flex-wrap gap-1.5" aria-label="Demo students">
-            {DEMO_PICKS.filter((id) => people.some((p) => p.student_id === id)).map((id) => (
-              <button key={id} type="button" aria-pressed={id === student} onClick={() => { setStudent(id); setShowAll(false); }}
-                className={`rounded-full px-3 py-1 text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime ${id === student ? "bg-lime text-lime-foreground" : "border border-panel-muted/40 text-panel-foreground hover:bg-white/10"}`}>
-                {people.find((p) => p.student_id === id)?.name.split(" ")[0] ?? id}
-              </button>
-            ))}
-          </div>
-        </div>
+        <StudentPicker people={people} student={student} inputId="p05-student" label="Try another student" onPick={(id) => { setStudent(id); setShowAll(false); }} />
       </div>
 
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">

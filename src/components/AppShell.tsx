@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Briefcase, Building2, GraduationCap, ClipboardCheck, ExternalLink, HelpCircle, Menu, MessagesSquare, Sparkles } from "lucide-react";
+import { Briefcase, Building2, GraduationCap, ClipboardCheck, ExternalLink, HelpCircle, ListChecks, Menu, MessagesSquare, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { resetDemo } from "@/lib/ipp-store";
 import { ChatWidget } from "@/components/ChatWidget";
@@ -12,12 +12,17 @@ const NAV = [
   { to: "/desk", label: "Internship Desk", icon: MessagesSquare },
 ] as const;
 
+// Team pages inside this app (src/routes/p0X.*).
+const TEAM = [
+  { to: "/p05/coordinator", label: "P05 Coordinator", note: "Check match results, Team 5", icon: ListChecks },
+] as const;
+
 // Team modules not yet ported into this app (docs/ARCHITECTURE.md, "escape hatch"): open in a new tab.
 const EXTERNAL = [
   {
     href: "https://thecyper.github.io/bus2010-p05-opportunity-matcher/",
-    label: "P05 Matching",
-    note: "Opportunity Matcher, Team 5",
+    label: "P05 Prototype",
+    note: "Sprint 2 version, Team 5",
     icon: Sparkles,
   },
 ] as const;
@@ -103,9 +108,25 @@ export function AppShell({ children }: { children: ReactNode }) {
             })}
           </nav>
           <p className="mb-2 mt-6 px-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Team modules (external)
+            Team modules
           </p>
           <nav aria-label="Team modules" className="flex flex-col gap-1">
+            {TEAM.map((t) => (
+              <Link
+                key={t.to}
+                to={t.to}
+                onClick={() => setOpen(false)}
+                className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                  path === t.to ? "bg-lime font-semibold text-lime-foreground" : "text-foreground hover:bg-muted"
+                }`}
+              >
+                <t.icon className="h-4 w-4" aria-hidden="true" />
+                <span className="flex min-w-0 flex-col">
+                  <span>{t.label}</span>
+                  <span className={`text-xs font-normal ${path === t.to ? "text-lime-foreground/80" : "text-muted-foreground"}`}>{t.note}</span>
+                </span>
+              </Link>
+            ))}
             {EXTERNAL.map((x) => (
               <a
                 key={x.href}

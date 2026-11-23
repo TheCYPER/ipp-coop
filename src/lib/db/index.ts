@@ -10,12 +10,16 @@
 export { callFunction, dbConfig, eq, inList, rpc, selectAll, SharedDbError, type DbOptions } from "./client";
 export {
   getAiSignals,
+  getChallenges,
   getCurrentProfiles,
   getDemonstratedEvidence,
+  getGapEvents,
   getLatestRecommendations,
   getOpenListings,
   getOpportunityFeed,
   getProfileFeed,
+  getRecommendationHistory,
+  getRecommendationsByIds,
   getSkills,
   scoreGoalLive,
   suggestSkillsLive,
